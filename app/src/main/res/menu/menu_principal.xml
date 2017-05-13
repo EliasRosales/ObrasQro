@@ -8,24 +8,24 @@
             android:title="Filtros">
             <menu>
                 <item
-                    android:id="@+id/opcion1"
+                    android:id="@+id/actuales"
                     android:title="Actuales"
                     android:icon="@drawable/actuales"/>
                 <item
-                    android:id="@+id/opcion2"
-                    android:title="Proximos"
+                    android:id="@+id/proximos"
+                    android:title="Próximos"
                     android:icon="@drawable/proximas"/>
 
                 <item
-                    android:id="@+id/opcion3"
+                    android:id="@+id/obras"
                     android:title="Obras"
                     android:icon="@drawable/obras"/>
                 <item
-                    android:id="@+id/opcion4"
+                    android:id="@+id/eventos"
                     android:title="Eventos"
                     android:icon="@drawable/eventos"/>
                 <item
-                    android:id="@+id/opcion5"
+                    android:id="@+id/todo"
                     android:title="Todo"
                     android:icon="@drawable/todo"/>
             </menu>
@@ -35,7 +35,7 @@
             android:title="Acerca">
             <menu>
                 <item
-                    android:id="@+id/opcion6"
+                    android:id="@+id/acerca_de"
                     android:title="Acerca de"
                     android:icon="@drawable/acerca"/>
             </menu>

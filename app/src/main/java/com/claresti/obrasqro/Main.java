@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -63,7 +64,7 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng qro = new LatLng(-20.5897233, -100.3915028);
+        LatLng qro = new LatLng(20.5897233, -100.3915028);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(qro, 15));
     }
 
@@ -78,7 +79,28 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                item.setChecked(true);
+                switch (item.getItemId()){
+                    case R.id.actuales:
+                        msg("actuales");
+                        break;
+                    case R.id.proximos:
+                        msg("proximos");
+                        break;
+                    case R.id.obras:
+                        msg("obras");
+                        break;
+                    case R.id.eventos:
+                        msg("eventos");
+                        break;
+                    case R.id.todo:
+                        msg("todo");
+                        break;
+                    case R.id.acerca_de:
+                        Intent i = new Intent(Main.this, acerca.class);
+                        startActivity(i);
+                        break;
+                }
+                /*
                 int pos = items.indexOf(item);
                 if (pos == 0) {
 
@@ -98,6 +120,7 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
                     Intent i = new Intent(Main.this, acerca.class);
                     startActivity(i);
                 }
+                */
                 drawerLayout.closeDrawer(nav);
                 item.setChecked(false);
                 return false;
@@ -116,6 +139,9 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
         });
     }
 
+    private void msg(String msg){
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+    }
 
 
 }
