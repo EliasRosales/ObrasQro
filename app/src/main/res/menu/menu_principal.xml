@@ -3,44 +3,34 @@
     <group
         android:checkableBehavior="all"
         android:id="@+id/grupoMenu">
-        <item
-            android:id="@+id/filtros"
-            android:title="Filtros">
-            <menu>
-                <item
-                    android:id="@+id/opcion1"
-                    android:title="Actuales"
-                    android:icon="@drawable/actuales"/>
-                <item
-                    android:id="@+id/opcion2"
-                    android:title="Proximos"
-                    android:icon="@drawable/proximas"/>
 
-                <item
-                    android:id="@+id/opcion3"
-                    android:title="Obras"
-                    android:icon="@drawable/obras"/>
-                <item
-                    android:id="@+id/opcion4"
-                    android:title="Eventos"
-                    android:icon="@drawable/eventos"/>
-                <item
-                    android:id="@+id/opcion5"
-                    android:title="Todo"
-                    android:icon="@drawable/todo"/>
-            </menu>
-        </item>
         <item
-            android:id="@+id/acerca"
-            android:title="Acerca">
-            <menu>
-                <item
-                    android:id="@+id/opcion6"
-                    android:title="Acerca de"
-                    android:icon="@drawable/acerca"/>
-            </menu>
-        </item>
+            android:id="@+id/opcion1"
+            android:title="Actuales"
+            android:icon="@drawable/actuales"/>
+        <item
+            android:id="@+id/opcion2"
+            android:title="Proximos"
+            android:icon="@drawable/proximas"/>
 
+        <item
+            android:id="@+id/opcion3"
+            android:title="Obras"
+            android:icon="@drawable/obras"/>
+        <item
+            android:id="@+id/opcion4"
+            android:title="Eventos"
+            android:icon="@drawable/eventos"/>
+        <item
+            android:id="@+id/opcion5"
+            android:title="Todo"
+            android:icon="@drawable/todo"/>
+        </group>
+    <group>
+        <item
+            android:id="@+id/opcion6"
+            android:title="Acerca de"
+            android:icon="@drawable/acerca"/>
 
     </group>
 </menu>
