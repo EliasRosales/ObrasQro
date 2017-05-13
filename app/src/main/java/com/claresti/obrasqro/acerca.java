@@ -41,7 +41,7 @@ public class acerca extends AppCompatActivity {
         for(int i = 0; i < menu.size(); i++){
             items.add(menu.getItem(i));
         }
-        items.get(4).setChecked(true);
+        items.get(5).setChecked(true);
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
