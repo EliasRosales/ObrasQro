@@ -1,8 +1,18 @@
 package com.claresti.obrasqro;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -10,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,6 +33,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.LOCATION_HARDWARE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 public class Main extends FragmentActivity implements OnMapReadyCallback {
 
     //Menu, Declaracion de variables
@@ -32,6 +49,10 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
     private NavigationView nav;
     //Variable mapa
     private GoogleMap mMap;
+    //variable layout
+    private RelativeLayout ventana;
+    //permisos
+    private final int MY_PERMISSION = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +65,12 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
 
         //Menu, Inicia las variables del menu y llama la funcion encargada de su manipulacion
         drawerLayout = (DrawerLayout) findViewById(R.id.dLayout);
-        nav = (NavigationView)findViewById(R.id.navigation);
+        nav = (NavigationView) findViewById(R.id.navigation);
         menu = nav.getMenu();
         menuNav();
 
+        //asignacion variables de layout
+        ventana = (RelativeLayout) findViewById(R.id.l_ventana);
     }
 
     /**
@@ -65,7 +88,53 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
 
         // Add a marker in Sydney and move the camera
         LatLng qro = new LatLng(20.5897233, -100.3915028);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(qro, 15));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(qro, 14));
+        //Validacion de permisos
+        if (permisos()) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            mMap.setMyLocationEnabled(true);
+            findMe();
+        }
+        todos();
+    }
+
+    private void findMe() {
+        LocationManager locationManager = (LocationManager)
+                getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        Location location = locationManager.getLastKnownLocation(locationManager
+                .getBestProvider(criteria, false));
+        double latitude = location.getLatitude();
+        double longitud = location.getLongitude();
+        LatLng myLocation = new LatLng(latitude, longitud);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 14));
+    }
+
+    private boolean permisos() {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+            return true;
+        }
+        if((checkSelfPermission(ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) && (checkSelfPermission(ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)){
+            return true;
+        }
+        if((shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) || (shouldShowRequestPermissionRationale(ACCESS_COARSE_LOCATION))){
+            Snackbar.make(ventana, "Los permisos son necesarios para poder usar la aplicación", Snackbar.LENGTH_INDEFINITE)
+                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.M)
+                        @Override
+                        public void onClick(View v) {
+                            requestPermissions(new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, MY_PERMISSION);
+                        }
+                    }).show();
+        }else{
+            requestPermissions(new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, MY_PERMISSION);
+        }
+        return false;
     }
 
     /**
@@ -81,19 +150,19 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.actuales:
-                        msg("actuales");
+                        actuales();
                         break;
                     case R.id.proximos:
-                        msg("proximos");
+                        proximos();
                         break;
                     case R.id.obras:
-                        msg("obras");
+                        obras();
                         break;
                     case R.id.eventos:
-                        msg("eventos");
+                        eventos();
                         break;
                     case R.id.todo:
-                        msg("todo");
+                        todos();
                         break;
                     case R.id.acerca_de:
                         Intent i = new Intent(Main.this, acerca.class);
@@ -137,6 +206,26 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
                 drawerLayout.openDrawer(nav);
             }
         });
+    }
+
+    private void actuales() {
+
+    }
+
+    private void proximos() {
+
+    }
+
+    private void obras() {
+
+    }
+
+    private void eventos() {
+
+    }
+
+    private void todos() {
+
     }
 
     private void msg(String msg){
