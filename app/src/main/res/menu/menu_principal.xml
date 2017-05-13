@@ -3,6 +3,7 @@
     <group
         android:checkableBehavior="all"
         android:id="@+id/grupoMenu">
+
         <item
             android:id="@+id/opcion1"
             android:title="Actuales"
@@ -24,6 +25,8 @@
             android:id="@+id/opcion5"
             android:title="Todo"
             android:icon="@drawable/todo"/>
+        </group>
+    <group>
         <item
             android:id="@+id/opcion6"
             android:title="Acerca de"
