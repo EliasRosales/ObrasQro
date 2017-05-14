@@ -10,8 +10,9 @@ public class objetoSucesos {
     private String latitud;
     private String longitud;
     private String tipo;
+    private String link;
 
-    public objetoSucesos(String titulo, String descripcion, String fecha_inicio, String fecha_fin, String latitud, String longitud, String tipo) {
+    public objetoSucesos(String titulo, String descripcion, String fecha_inicio, String fecha_fin, String latitud, String longitud, String tipo, String link) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.fecha_inicio = fecha_inicio;
@@ -19,6 +20,7 @@ public class objetoSucesos {
         this.latitud = latitud;
         this.longitud = longitud;
         this.tipo = tipo;
+        this.link = link;
     }
 
     public String getTitulo() {
@@ -75,5 +77,13 @@ public class objetoSucesos {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }
