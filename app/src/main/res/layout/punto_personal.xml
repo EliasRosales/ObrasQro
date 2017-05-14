@@ -23,7 +23,7 @@
         android:textSize="50dp"/>
 
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:textSize="15dp"
         android:layout_marginTop="20dp"
@@ -32,6 +32,20 @@
         android:paddingLeft="15dp"
         android:layout_toRightOf="@id/img_Tipo"
         android:text="NOMBRE "/>
+    <ImageView
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="#ffffff"
+        android:layout_marginLeft="5dp"
+        android:foregroundGravity="center_vertical"
+        android:layout_centerVertical="true"
+        android:scaleType="centerInside"
+        android:padding="5dp"
+        android:layout_toRightOf="@id/txt_nombre"
+        android:src="@drawable/borrar"
+        android:orientation="vertical"
+        android:id="@+id/img_borrar"
+        android:textSize="50dp"/>
 
 
 
