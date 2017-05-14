@@ -39,6 +39,6 @@ public class mostrar_puntos_personales extends AppCompatActivity {
 
     private void cargarLista() {
         ArrayList<ObjMarcador> marcadores = bd.selectMarcadores();
-        list_marcadores.setAdapter(new AdapterPuntosPersonales(getApplicationContext(), marcadores));
+        list_marcadores.setAdapter(new AdapterPuntosPersonales(getApplicationContext(), marcadores, getFragmentManager()));
     }
 }
