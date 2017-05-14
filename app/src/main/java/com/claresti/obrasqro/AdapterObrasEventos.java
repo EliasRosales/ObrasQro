@@ -60,6 +60,8 @@ public class AdapterObrasEventos extends BaseAdapter {
             icono.setImageResource(R.drawable.obras_osc);
         }else if(sucesos[position].getTipo().equals("evento")){
             icono.setImageResource(R.drawable.eventos_osc);
+        }else if(sucesos[position].getTipo().equals("estacionamiento")){
+            icono.setImageResource(R.drawable.estacionamiento_osc);
         }
         txt_nombre.setText(sucesos[position].getTitulo());
         txt_descirpcion.setText(sucesos[position].getDescripcion());
