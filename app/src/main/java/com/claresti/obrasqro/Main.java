@@ -1,6 +1,8 @@
 package com.claresti.obrasqro;
 
 import android.Manifest;
+import android.app.DownloadManager;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,7 +17,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,21 +27,30 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.LOCATION_HARDWARE;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class Main extends FragmentActivity implements OnMapReadyCallback {
 
@@ -53,6 +66,7 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
     private RelativeLayout ventana;
     //permisos
     private final int MY_PERMISSION = 100;
+    private static final String TAG = "Json";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,9 +111,12 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
             mMap.setMyLocationEnabled(true);
             findMe();
         }
-        todos();
+        marcadores("todas");
     }
 
+    /**
+     * funcion que consigue la ubicacion actual del usuario y lo posiciona en el mapa
+     */
     private void findMe() {
         LocationManager locationManager = (LocationManager)
                 getSystemService(Context.LOCATION_SERVICE);
@@ -115,6 +132,11 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 14));
     }
 
+    /**
+     * funcion encargada de verificar los permisos de ubicacion y en caso de no tenerlos
+     * solicita al usuario activarlos
+     * @return true en caso de tener los permisos, false en caso contrario
+     */
     private boolean permisos() {
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
             return true;
@@ -144,58 +166,35 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
         for (int i = 0; i < menu.size(); i++) {
             items.add(menu.getItem(i));
         }
-        items.get(0).setChecked(true);
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.actuales:
-                        actuales();
+                        marcadores("actuales");
                         break;
                     case R.id.proximos:
-                        proximos();
+                        marcadores("proximas");
                         break;
                     case R.id.obras:
-                        obras();
+                        marcadores("tipo,obra");
                         break;
                     case R.id.eventos:
-                        eventos();
+                        marcadores("tipo,evento");
                         break;
                     case R.id.todo:
-                        todos();
+                        marcadores("todas");
                         break;
                     case R.id.acerca_de:
                         Intent i = new Intent(Main.this, acerca.class);
                         startActivity(i);
                         break;
                 }
-                /*
-                int pos = items.indexOf(item);
-                if (pos == 0) {
-
-                } else if (pos == 1) {
-                    //Intent i = new Intent(agregarGasto.this, agregar_categoria.class);
-                    //startActivity(i);
-                } else if (pos == 2) {
-                    //Intent i = new Intent(agregarGasto.this, presupuestos.class);
-                    //startActivity(i);
-                } else if (pos == 3) {
-                    //Intent i = new Intent(agregarGasto.this, registros.class);
-                    //startActivity(i);
-                } else if (pos == 4) {
-                    //Intent i = new Intent(agregarGasto.this, acerca.class);
-                    //startActivity(i);
-                } else if (pos == 5) {
-                    Intent i = new Intent(Main.this, acerca.class);
-                    startActivity(i);
-                }
-                */
                 drawerLayout.closeDrawer(nav);
                 item.setChecked(false);
                 return false;
             }
         });
-
         //Asignacion del header menu en una bariable
         View headerview = nav.getHeaderView(0);
         //Funcionalidad del boton de menu
@@ -208,29 +207,106 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
         });
     }
 
-    private void actuales() {
+    private void marcadores(String operacion) {
+        mMap.clear();
+        final Gson gson = new Gson();
+        JsonObjectRequest request;
+        VolleySingleton.getInstance(Main.this).
+                addToRequestQueue(
+                        request = new JsonObjectRequest(
+                                Request.Method.GET,
+                                "http://hackaton.claresti.com/api/?o=" + operacion,
+                                new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        try {
+                                            String res = response.getString("res");
+                                            switch(res){
+                                                case "1":
+                                                    JSONArray jArrayMarcadores = response.getJSONArray("registros");
+                                                    objetoSucesos[] arrayMarcadores = gson.fromJson(jArrayMarcadores.toString(), objetoSucesos[].class);
+                                                    Log.i("JSON", arrayMarcadores.length + "");
+                                                    for(objetoSucesos marcador : arrayMarcadores){
+                                                        Log.i("JSON - for", "Si entra");
+                                                        agregarMarcador(marcador);
+                                                    }
+                                                    break;
+                                                case "0":
+                                                    //Regresar mensaje de que no hay registros
+                                                    break;
+                                            }
+                                        }catch(JSONException json){
+                                            Log.e("JSON", json.toString());
+                                        }
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
 
+                                    }
+                                }
+                        )
+                );
+        request.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 50000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 50000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
+            }
+        });
     }
 
-    private void proximos() {
-
+    /**
+     * funcion encargada de poner los pines en el mapa
+     * @param sucesos objeto que contiene los elementos del Json de la peticion
+     */
+    private void agregarMarcador(objetoSucesos sucesos) {
+        LatLng pos = new LatLng(Double.parseDouble(sucesos.getLatitud()), Double.parseDouble(sucesos.getLongitud()));
+        switch (sucesos.getTipo()){
+            case "obra":
+                Log.i("JSON - obra", "crea marcador obra");
+                mMap.addMarker(
+                        new MarkerOptions().
+                                position(pos).
+                                title(sucesos.getTitulo()).
+                                icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).
+                                snippet(sucesos.getFecha_inicio() + " - " + sucesos.getFecha_fin())
+                );
+                break;
+            case "evento":
+                Log.i("JSON - evento", "crea marcador evento");
+                mMap.addMarker(
+                        new MarkerOptions().
+                                position(pos).
+                                title(sucesos.getTitulo()).
+                                icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).
+                                snippet(sucesos.getFecha_inicio() + " - " + sucesos.getFecha_fin())
+                );
+                break;
+        }
     }
 
-    private void obras() {
-
-    }
-
-    private void eventos() {
-
-    }
-
-    private void todos() {
-
-    }
-
+    /**
+     * funcion encargada de crear un snackbar con un mensaje y un boton de aceptar para ocultarla
+     * @param msg String que contiene el mensaje
+     */
     private void msg(String msg){
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-    }
+        Snackbar.make(ventana, msg, Snackbar.LENGTH_SHORT).setAction("Aceptar", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        }).show();
+    }
 
 }
