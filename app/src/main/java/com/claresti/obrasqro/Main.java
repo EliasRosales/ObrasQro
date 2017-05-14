@@ -10,6 +10,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomSheetBehavior;
@@ -75,6 +76,8 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
     //Declaracion de variables para el control de bottom sheet
     private Button btnConBottomSheet;
     private LinearLayout bottomSheet;
+    //BD
+    private BD bd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,14 +97,19 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
         //asignacion variables de layout
         ventana = (RelativeLayout) findViewById(R.id.l_ventana);
         progreso = (ProgressBar) findViewById(R.id.progress);
+        bd = new BD(getApplicationContext());
 
         //Llamada de las variables para el control de bottomsheet
         bottomSheet = (LinearLayout)findViewById(R.id.bottomSheet);
         final BottomSheetBehavior bsb = BottomSheetBehavior.from(bottomSheet);
 
-        //funcion para expandir bottomsheet en cuanto inicia la app
-        bsb.setState(BottomSheetBehavior.STATE_EXPANDED);
-
+        if(bd.selectUsuario().equals("0")) {
+            //funcion para expandir bottomsheet en cuanto inicia la app
+            bsb.setState(BottomSheetBehavior.STATE_EXPANDED);
+            bd.updateUsuario();
+        }else{
+            bsb.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }
         //Control para esconder bottomsheet
         btnConBottomSheet=(Button)findViewById(R.id.btnConBottomSheet);
         btnConBottomSheet.setOnClickListener(new View.OnClickListener() {
