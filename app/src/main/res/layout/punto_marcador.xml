@@ -31,18 +31,6 @@
         android:paddingLeft="15dp"
         android:layout_toRightOf="@id/img_Tipo"
         android:text="NOMBRE "/>
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="12dp"
-        android:textColor="#191919"
-        android:layout_marginTop="3dp"
-        android:id="@+id/txt_descripcion"
-        android:layout_below="@id/txt_nombre"
-        android:paddingLeft="25dp"
-        android:layout_toRightOf="@id/img_Tipo"
-        android:text="Descripcion" />
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -50,7 +38,7 @@
         android:textColor="#191919"
         android:layout_marginTop="3dp"
         android:id="@+id/txt_fechaInicio"
-        android:layout_below="@id/txt_descripcion"
+        android:layout_below="@id/txt_nombre"
         android:paddingLeft="25dp"
         android:layout_toRightOf="@id/img_Tipo"
         android:text="Fecha Inicio" />
