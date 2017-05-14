@@ -44,7 +44,9 @@
         <activity
             android:name=".Main"
             android:screenOrientation="portrait" />
-        <activity android:name=".ListarPuntos"></activity>
+        <activity android:name=".ListarPuntos" />
+        <activity android:name=".agregar_punto_personal" />
+        <activity android:name=".mostrar_puntos_personales"></activity>
     </application>
 
 </manifest>

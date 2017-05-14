@@ -31,9 +31,24 @@
             </menu>
         </item>
         <item
-            android:id="@+id/puntos"
-            android:title="Obras y Eventos"
-            android:icon="@drawable/puntos"/>
+            android:id="@+id/subpuntos"
+            android:title="Puntos">
+            <menu>
+                <item
+                    android:id="@+id/puntos"
+                    android:title="Obras y Eventos"
+                    android:icon="@drawable/puntos"/>
+                <item
+                    android:id="@+id/agregar_puntos_personales"
+                    android:title="Agrear puntos personales"
+                    android:icon="@drawable/home_location"/>
+                <item
+                    android:id="@+id/ver_puntos_personales"
+                    android:title="Ver puntos personales"
+                    android:icon="@drawable/puntos"/>
+            </menu>
+        </item>
+
         <item
             android:id="@+id/acerca"
             android:title="Acerca">
