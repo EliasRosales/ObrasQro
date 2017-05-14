@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -316,22 +318,24 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
         switch (sucesos.getTipo()){
             case "obra":
                 Log.i("JSON - obra", "crea marcador obra");
+                mMap.setInfoWindowAdapter(new BalloonAdapter(getLayoutInflater()));
                 mMap.addMarker(
                         new MarkerOptions().
                                 position(pos).
                                 title(sucesos.getTitulo()).
                                 icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).
-                                snippet(sucesos.getFecha_inicio() + " - " + sucesos.getFecha_fin())
+                                snippet("Inicio: " + sucesos.getFecha_inicio() + "\nFin: " + sucesos.getFecha_fin())
                 );
                 break;
             case "evento":
                 Log.i("JSON - evento", "crea marcador evento");
+                mMap.setInfoWindowAdapter(new BalloonAdapter(getLayoutInflater()));
                 mMap.addMarker(
                         new MarkerOptions().
                                 position(pos).
                                 title(sucesos.getTitulo()).
                                 icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).
-                                snippet(sucesos.getFecha_inicio() + " - " + sucesos.getFecha_fin())
+                                snippet("Inicio: " + sucesos.getFecha_inicio() + "\nFin: " + sucesos.getFecha_fin())
                 );
                 break;
         }
@@ -350,4 +354,31 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
         }).show();
     }
 
+    //Clase para mostrar informacion marcador
+
+    public class BalloonAdapter implements GoogleMap.InfoWindowAdapter {
+
+        LayoutInflater inflater = null;
+
+        public BalloonAdapter(LayoutInflater inflater) {
+            this.inflater = inflater;
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            View v = inflater.inflate(R.layout.punto_marcador, null);
+            if(marker != null){
+                TextView titulo = (TextView)v.findViewById(R.id.txt_nombre);
+                TextView fecha = (TextView)v.findViewById(R.id.txt_fechaInicio);
+                titulo.setText(marker.getTitle());
+                fecha.setText(marker.getSnippet());
+            }
+            return v;
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            return null;
+        }
+    }
 }

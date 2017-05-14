@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="#FFFFFF"
     android:padding="0dp"
@@ -8,31 +8,19 @@
     android:gravity="bottom"
     android:id="@+id/layout">
 
-    <ImageView
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:background="#ffffff"
-        android:layout_marginLeft="5dp"
-        android:foregroundGravity="center_vertical"
-        android:layout_centerVertical="true"
-        android:scaleType="centerInside"
-        android:padding="5dp"
-        android:orientation="vertical"
-        android:id="@+id/img_Tipo"
-        android:textSize="50dp"/>
 
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15dp"
         android:layout_marginTop="5dp"
         android:textColor="#191919"
         android:id="@+id/txt_nombre"
         android:paddingLeft="15dp"
-        android:layout_toRightOf="@id/img_Tipo"
+        android:paddingRight="15dp"
         android:text="NOMBRE "/>
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12dp"
         android:textColor="#191919"
@@ -40,20 +28,10 @@
         android:id="@+id/txt_fechaInicio"
         android:layout_below="@id/txt_nombre"
         android:paddingLeft="25dp"
-        android:layout_toRightOf="@id/img_Tipo"
+        android:paddingRight="15dp"
+        android:layout_marginBottom="10dp"
         android:text="Fecha Inicio" />
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="12dp"
-        android:textColor="#191919"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="3dp"
-        android:id="@+id/txt_fechaFin"
-        android:layout_below="@id/txt_fechaInicio"
-        android:paddingLeft="25dp"
-        android:layout_toRightOf="@id/img_Tipo"
-        android:text="Fecha Fin" />
+
 
 
 
