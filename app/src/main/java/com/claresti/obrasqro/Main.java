@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -67,6 +68,7 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     //variable layout
     private RelativeLayout ventana;
+    private ProgressBar progreso;
     //permisos
     private final int MY_PERMISSION = 100;
     private static final String TAG = "Json";
@@ -91,8 +93,9 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
 
         //asignacion variables de layout
         ventana = (RelativeLayout) findViewById(R.id.l_ventana);
-        //Llamada de las variables para el control de bottomsheet
+        progreso = (ProgressBar) findViewById(R.id.progress);
 
+        //Llamada de las variables para el control de bottomsheet
         bottomSheet = (LinearLayout)findViewById(R.id.bottomSheet);
         final BottomSheetBehavior bsb = BottomSheetBehavior.from(bottomSheet);
 
@@ -122,7 +125,6 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         // Add a marker in Sydney and move the camera
         LatLng qro = new LatLng(20.5897233, -100.3915028);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(qro, 14));
@@ -232,6 +234,7 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
 
     private void marcadores(String operacion) {
         mMap.clear();
+        progreso.setVisibility(View.VISIBLE);
         final Gson gson = new Gson();
         JsonObjectRequest request;
         VolleySingleton.getInstance(Main.this).
@@ -253,6 +256,7 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
                                                         Log.i("JSON - for", "Si entra");
                                                         agregarMarcador(marcador);
                                                     }
+                                                    progreso.setVisibility(View.GONE);
                                                     break;
                                                 case "0":
                                                     //Regresar mensaje de que no hay registros
