@@ -6,9 +6,11 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
@@ -21,16 +23,20 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,8 +59,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Handler;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -82,6 +98,8 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
     private BD bd;
     //Variable intent
     private Intent i;
+    private double latUsu;
+    private double lonUsu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +141,7 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
                 bsb.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
+
     }
 
     /**
@@ -179,9 +198,9 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
         }
         Location location = locationManager.getLastKnownLocation(locationManager
                 .getBestProvider(criteria, false));
-        double latitude = location.getLatitude();
-        double longitud = location.getLongitude();
-        LatLng myLocation = new LatLng(latitude, longitud);
+        latUsu = location.getLatitude();
+        lonUsu = location.getLongitude();
+        LatLng myLocation = new LatLng(latUsu, lonUsu);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 14));
     }
 
@@ -244,6 +263,14 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
                         break;
                     case R.id.puntos:
                         i = new Intent(Main.this, ListarPuntos.class);
+                        startActivity(i);
+                        break;
+                    case R.id.agregar_puntos_personales:
+                        i = new Intent(Main.this, agregar_punto_personal.class);
+                        startActivity(i);
+                        break;
+                    case R.id.ver_puntos_personales:
+                        i = new Intent(Main.this, mostrar_puntos_personales.class);
                         startActivity(i);
                         break;
                 }
@@ -348,8 +375,17 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
                         new MarkerOptions().
                                 position(pos).
                                 title(sucesos.getTitulo()).
-                                icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).
+                                icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)).
                                 snippet("Inicio: " + sucesos.getFecha_inicio() + "\nFin: " + sucesos.getFecha_fin())
+                );
+                break;
+            case "estacionamiento":
+                Log.i("JSON - evento", "crea marcador evento");
+                mMap.addMarker(
+                        new MarkerOptions().
+                                position(pos).
+                                title(sucesos.getTitulo()).
+                                icon(BitmapDescriptorFactory.fromResource(R.drawable.estacionamiento))
                 );
                 break;
         }
@@ -367,6 +403,25 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
             }
         }).show();
     }
+
+    //Autocomplete text
+
+    public String getPlaceAutoCompleteUrl(String input) {
+        StringBuilder urlString = new StringBuilder();
+        urlString.append("https://maps.googleapis.com/maps/api/place/autocomplete/json");
+        urlString.append("?input=");
+        try {
+            urlString.append(URLEncoder.encode(input, "utf8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        urlString.append("&amp;location=");
+        urlString.append(latUsu + "," + lonUsu); // append lat long of current location to show nearby results.
+        urlString.append("&amp;radius=500&amp;language=en");
+        urlString.append("&amp;key=" + "AIzaSyAZBliYPwbdtcHSReLIsBK3QwaVe_W5xuM");
+        return urlString.toString();
+    }
+
 
     //Clase para mostrar informacion marcador
 
@@ -395,4 +450,43 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
             return null;
         }
     }
+
+    private String downloadUrl(String strUrl) throws IOException {
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try{
+            URL url = new URL(strUrl);
+
+            // Creating an http connection to communicate with url
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+            // Connecting to url
+            urlConnection.connect();
+
+            // Reading data from url
+            iStream = urlConnection.getInputStream();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+            StringBuffer sb = new StringBuffer();
+
+            String line = "";
+            while( ( line = br.readLine()) != null){
+                sb.append(line);
+            }
+
+            data = sb.toString();
+
+            br.close();
+
+        }catch(Exception e){
+            Log.e("Exception url", e.toString());
+        }finally{
+            iStream.close();
+            urlConnection.disconnect();
+        }
+        return data;
+    }
+
 }

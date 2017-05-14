@@ -55,8 +55,6 @@
                 android:layout_height="match_parent"
                 tools:context="com.claresti.obrasqro.Main" />
 
-
-
         </RelativeLayout>
 
         <ProgressBar
@@ -75,6 +73,6 @@
         android:layout_gravity="start"
         app:menu="@menu/menu_principal"
         app:itemTextColor="#898989"
-        app:headerLayout="@layout/header_menu"/>
+        app:headerLayout="@layout/header_menu" />
 
 </android.support.v4.widget.DrawerLayout>

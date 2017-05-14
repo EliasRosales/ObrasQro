@@ -17,7 +17,7 @@ public class Bienvenida extends AppCompatActivity {
             public void run() {
                 try{
                     Log.i("hilo", "antes sleep");
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                     Log.i("hilo", "despues sleep");
                     Intent i = new Intent(Bienvenida.this, Main.class);
                     startActivity(i);
