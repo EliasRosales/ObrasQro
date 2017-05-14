@@ -28,8 +28,8 @@ public class BD extends SQLiteOpenHelper {
         String tablaMarcadores = "CREATE TABLE marcadores (" +
                 "marId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                 "marNombre TEXT," +
-                "marLat FLOAT," +
-                "marLon FLOAT" +
+                "marLat DOUBLE," +
+                "marLon DOUBLE" +
                 ")";
 
         //Crear tablas
@@ -125,8 +125,8 @@ public class BD extends SQLiteOpenHelper {
                 ObjMarcador marcador = new ObjMarcador(
                         cursor.getInt(cursor.getColumnIndex("marId")),
                         cursor.getString(cursor.getColumnIndex("marNombre")),
-                        cursor.getFloat(cursor.getColumnIndex("marLat")),
-                        cursor.getFloat(cursor.getColumnIndex("marLon"))
+                        cursor.getDouble(cursor.getColumnIndex("marLat")),
+                        cursor.getDouble(cursor.getColumnIndex("marLon"))
                 );
                 marcadores.add(marcador);
             }while(cursor.moveToNext());

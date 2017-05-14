@@ -18,7 +18,6 @@ import java.util.List;
 public class acerca extends AppCompatActivity {
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,9 +26,11 @@ public class acerca extends AppCompatActivity {
 
         //declaracion de variables de layout
         ImageView claresTi;
+        ImageView btnRegresar;
 
         //asignacion de variables de layout
         claresTi = (ImageView)findViewById(R.id.acerca);
+        btnRegresar = (ImageView)findViewById(R.id.Btnregresar);
 
         //Listener
         claresTi.setOnClickListener(new View.OnClickListener() {
@@ -38,6 +39,12 @@ public class acerca extends AppCompatActivity {
                 Uri uri = Uri.parse("https://www.claresti.com");
                 Intent i = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(i);
+            }
+        });
+        btnRegresar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

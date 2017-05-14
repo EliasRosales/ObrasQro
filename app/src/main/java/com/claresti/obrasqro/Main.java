@@ -168,17 +168,19 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
             mMap.setMyLocationEnabled(true);
             findMe();
         }
-        cargarFavoritos();
         marcadores("todas");
+        cargarFavoritos();
     }
 
     private void cargarFavoritos() {
         ArrayList<ObjMarcador> marcadores = bd.selectMarcadores();
+        Log.i("bd", "tamaño: " + marcadores.size());
         if(marcadores.size() > 0){
             for(ObjMarcador marcador : marcadores){
+                Log.i("bd", "for si entra");
                 mMap.addMarker(
                         new MarkerOptions().
-                                position(marcador.getLatLng()).
+                                position(new LatLng(marcador.getLat(), marcador.getLon())).
                                 title(marcador.getNombre()).
                                 icon(BitmapDescriptorFactory.fromResource(R.drawable.favorito))
                 );
@@ -256,6 +258,7 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
                         break;
                     case R.id.todo:
                         marcadores("todas");
+                        cargarFavoritos();
                         break;
                     case R.id.acerca_de:
                         i = new Intent(Main.this, acerca.class);

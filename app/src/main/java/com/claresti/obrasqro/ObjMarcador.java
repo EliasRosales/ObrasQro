@@ -6,10 +6,10 @@ public class ObjMarcador {
 
     private int id;
     private String nombre;
-    private float lat;
-    private float lon;
+    private double lat;
+    private double lon;
 
-    public ObjMarcador(int id, String nombre, float lat, float lon) {
+    public ObjMarcador(int id, String nombre, double lat, double lon) {
         this.id = id;
         this.nombre = nombre;
         this.lat = lat;
@@ -36,19 +36,19 @@ public class ObjMarcador {
         this.nombre = nombre;
     }
 
-    public float getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public void setLat(float lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
-    public float getLon() {
+    public double getLon() {
         return lon;
     }
 
-    public void setLon(float lon) {
+    public void setLon(double lon) {
         this.lon = lon;
     }
 

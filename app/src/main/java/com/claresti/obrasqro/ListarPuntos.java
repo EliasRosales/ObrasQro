@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -23,6 +24,7 @@ public class ListarPuntos extends AppCompatActivity {
     //elementos Listview
     private ListView list_categoria;
     private ProgressBar progreso;
+    private ImageView btnRegresar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,13 @@ public class ListarPuntos extends AppCompatActivity {
         //asignacion de variables
         list_categoria = (ListView)findViewById(R.id.lis_categoria);
         progreso = (ProgressBar)findViewById(R.id.progress);
+        btnRegresar = (ImageView)findViewById(R.id.Btnregresar);
+        btnRegresar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         cargarLista();
     }
