@@ -78,6 +78,8 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
     private LinearLayout bottomSheet;
     //BD
     private BD bd;
+    //Variable intent
+    private Intent i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,7 +221,11 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
                         marcadores("todas");
                         break;
                     case R.id.acerca_de:
-                        Intent i = new Intent(Main.this, acerca.class);
+                        i = new Intent(Main.this, acerca.class);
+                        startActivity(i);
+                        break;
+                    case R.id.puntos:
+                        i = new Intent(Main.this, ListarPuntos.class);
                         startActivity(i);
                         break;
                 }
