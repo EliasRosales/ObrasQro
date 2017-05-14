@@ -43,7 +43,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Main"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity android:name=".ListarPuntos"></activity>
     </application>
 
 </manifest>
