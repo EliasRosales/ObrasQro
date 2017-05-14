@@ -23,7 +23,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:padding="16dp"
         android:textColor="#ffffff"
-        android:text="Esta Aplicacion sirve para ver los los puntos en los que se estan realizando obras en la ciudad" />
+        android:text="ObrasQro permite obtener información acerca de los recursos utilizados, la localización, e incluso conocer los procesos seguidos para llevar a cabo las diferentes actividades" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
