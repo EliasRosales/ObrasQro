@@ -137,6 +137,7 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setInfoWindowAdapter(new BalloonAdapter(getLayoutInflater()));
         // Add a marker in Sydney and move the camera
         LatLng qro = new LatLng(20.5897233, -100.3915028);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(qro, 14));
@@ -148,7 +149,22 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
             mMap.setMyLocationEnabled(true);
             findMe();
         }
+        cargarFavoritos();
         marcadores("todas");
+    }
+
+    private void cargarFavoritos() {
+        ArrayList<ObjMarcador> marcadores = bd.selectMarcadores();
+        if(marcadores.size() > 0){
+            for(ObjMarcador marcador : marcadores){
+                mMap.addMarker(
+                        new MarkerOptions().
+                                position(marcador.getLatLng()).
+                                title(marcador.getNombre()).
+                                icon(BitmapDescriptorFactory.fromResource(R.drawable.favorito))
+                );
+            }
+        }
     }
 
     /**
@@ -318,7 +334,6 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
         switch (sucesos.getTipo()){
             case "obra":
                 Log.i("JSON - obra", "crea marcador obra");
-                mMap.setInfoWindowAdapter(new BalloonAdapter(getLayoutInflater()));
                 mMap.addMarker(
                         new MarkerOptions().
                                 position(pos).
@@ -329,7 +344,6 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
                 break;
             case "evento":
                 Log.i("JSON - evento", "crea marcador evento");
-                mMap.setInfoWindowAdapter(new BalloonAdapter(getLayoutInflater()));
                 mMap.addMarker(
                         new MarkerOptions().
                                 position(pos).
