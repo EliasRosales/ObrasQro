@@ -313,10 +313,12 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
                                                 case "1":
                                                     JSONArray jArrayMarcadores = response.getJSONArray("registros");
                                                     objetoSucesos[] arrayMarcadores = gson.fromJson(jArrayMarcadores.toString(), objetoSucesos[].class);
-                                                    Log.i("JSON", arrayMarcadores.length + "");
-                                                    for(objetoSucesos marcador : arrayMarcadores){
-                                                        Log.i("JSON - for", "Si entra");
-                                                        agregarMarcador(marcador);
+                                                    if(arrayMarcadores.length > 0) {
+                                                        Log.i("JSON", arrayMarcadores.length + "");
+                                                        for (objetoSucesos marcador : arrayMarcadores) {
+                                                            Log.i("JSON - for", "Si entra");
+                                                            agregarMarcador(marcador);
+                                                        }
                                                     }
                                                     progreso.setVisibility(View.GONE);
                                                     break;
@@ -359,38 +361,40 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
      * funcion encargada de poner los pines en el mapa
      * @param sucesos objeto que contiene los elementos del Json de la peticion
      */
-    private void agregarMarcador(objetoSucesos sucesos) {
+    public void agregarMarcador(objetoSucesos sucesos) {
         LatLng pos = new LatLng(Double.parseDouble(sucesos.getLatitud()), Double.parseDouble(sucesos.getLongitud()));
-        switch (sucesos.getTipo()){
-            case "obra":
-                Log.i("JSON - obra", "crea marcador obra");
-                mMap.addMarker(
-                        new MarkerOptions().
-                                position(pos).
-                                title(sucesos.getTitulo()).
-                                icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).
-                                snippet("Inicio: " + sucesos.getFecha_inicio() + "\nFin: " + sucesos.getFecha_fin())
-                );
-                break;
-            case "evento":
-                Log.i("JSON - evento", "crea marcador evento");
-                mMap.addMarker(
-                        new MarkerOptions().
-                                position(pos).
-                                title(sucesos.getTitulo()).
-                                icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)).
-                                snippet("Inicio: " + sucesos.getFecha_inicio() + "\nFin: " + sucesos.getFecha_fin())
-                );
-                break;
-            case "estacionamiento":
-                Log.i("JSON - evento", "crea marcador evento");
-                mMap.addMarker(
-                        new MarkerOptions().
-                                position(pos).
-                                title(sucesos.getTitulo()).
-                                icon(BitmapDescriptorFactory.fromResource(R.drawable.estacionamiento))
-                );
-                break;
+        if(sucesos.getTipo() != null) {
+            switch (sucesos.getTipo()) {
+                case "obra":
+                    Log.i("JSON - obra", "crea marcador obra");
+                    mMap.addMarker(
+                            new MarkerOptions().
+                                    position(pos).
+                                    title(sucesos.getTitulo()).
+                                    icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).
+                                    snippet("Inicio: " + sucesos.getFecha_inicio() + "\nFin: " + sucesos.getFecha_fin())
+                    );
+                    break;
+                case "evento":
+                    Log.i("JSON - evento", "crea marcador evento");
+                    mMap.addMarker(
+                            new MarkerOptions().
+                                    position(pos).
+                                    title(sucesos.getTitulo()).
+                                    icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)).
+                                    snippet("Inicio: " + sucesos.getFecha_inicio() + "\nFin: " + sucesos.getFecha_fin())
+                    );
+                    break;
+                case "estacionamiento":
+                    Log.i("JSON - evento", "crea marcador evento");
+                    mMap.addMarker(
+                            new MarkerOptions().
+                                    position(pos).
+                                    title(sucesos.getTitulo()).
+                                    icon(BitmapDescriptorFactory.fromResource(R.drawable.estacionamiento))
+                    );
+                    break;
+            }
         }
     }
 

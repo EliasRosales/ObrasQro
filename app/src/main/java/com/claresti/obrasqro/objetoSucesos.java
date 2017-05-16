@@ -3,6 +3,7 @@ package com.claresti.obrasqro;
 
 public class objetoSucesos {
 
+    private String id;
     private String titulo;
     private String descripcion;
     private String fecha_inicio;
@@ -12,7 +13,8 @@ public class objetoSucesos {
     private String tipo;
     private String link;
 
-    public objetoSucesos(String titulo, String descripcion, String fecha_inicio, String fecha_fin, String latitud, String longitud, String tipo, String link) {
+    public objetoSucesos(String id, String titulo, String descripcion, String fecha_inicio, String fecha_fin, String latitud, String longitud, String tipo, String link) {
+        this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.fecha_inicio = fecha_inicio;
@@ -25,6 +27,14 @@ public class objetoSucesos {
 
     public String getTitulo() {
         return titulo;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setTitulo(String titulo) {
