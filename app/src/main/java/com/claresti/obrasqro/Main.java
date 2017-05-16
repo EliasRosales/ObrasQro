@@ -358,7 +358,7 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
     }
 
     /**
-     * funcion encargada de poner los pines en el mapa
+     * funcion encargada de poner los pines en el mapa del JSON
      * @param sucesos objeto que contiene los elementos del Json de la peticion
      */
     public void agregarMarcador(objetoSucesos sucesos) {
