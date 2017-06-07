@@ -56,12 +56,14 @@ public class AdapterObrasEventos extends BaseAdapter {
         txt_fechaInicio = (TextView)convertView.findViewById(R.id.txt_fechaInicio);
         txt_fechaFin = (TextView)convertView.findViewById(R.id.txt_fechaFin);
         ventana = (RelativeLayout)convertView.findViewById(R.id.layout);
-        if(sucesos[position].getTipo().equals("obra")){
-            icono.setImageResource(R.drawable.obras_osc);
-        }else if(sucesos[position].getTipo().equals("evento")){
-            icono.setImageResource(R.drawable.eventos_osc);
-        }else if(sucesos[position].getTipo().equals("estacionamiento")){
-            icono.setImageResource(R.drawable.estacionamiento_osc);
+        if(sucesos[position].getTipo() != null) {
+            if (sucesos[position].getTipo().equals("obra")) {
+                icono.setImageResource(R.drawable.obras_osc);
+            } else if (sucesos[position].getTipo().equals("evento")) {
+                icono.setImageResource(R.drawable.eventos_osc);
+            } else if (sucesos[position].getTipo().equals("estacionamiento")) {
+                icono.setImageResource(R.drawable.estacionamiento_osc);
+            }
         }
         txt_nombre.setText(sucesos[position].getTitulo());
         txt_descirpcion.setText(sucesos[position].getDescripcion());
